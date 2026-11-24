@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d18">
+<title>TAHUIN Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:#fff;font-family:Arial,sans-serif}
+header{padding:24px 20px;background:#101a2c;border-bottom:1px solid #26344d}
+header h1{margin:0;color:#58b9ff}
+header p{color:#9baac0;font-size:13px}
+main{padding:18px;max-width:750px;margin:auto}
+.card{background:#111d30;border:1px solid #263b59;border-radius:15px;padding:18px;margin-bottom:16px}
+h2{font-size:19px;margin-top:0}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{background:#172943;padding:15px;border-radius:12px}
+.stat strong{display:block;font-size:25px;color:#58b9ff}
+button{background:#1689e8;color:white;border:0;border-radius:9px;padding:12px 16px;font-weight:bold}
+input,textarea,select{width:100%;padding:13px;margin:7px 0 13px;background:#081322;border:1px solid #354a66;border-radius:9px;color:white;font-size:15px}
+textarea{min-height:100px;resize:vertical}
+label{font-size:13px;color:#b6c7dc}
+.project{border-top:1px solid #30415a;padding:13px 0}
+small{color:#a4b5ca}
+</style>
+</head>
+<body>
+<header>
+<h1>TAHUIN STUDIO</h1>
+<p>AI CONTENT PRODUCTION WORKSPACE</p>
+</header>
+<main>
+<section class="card">
+<h2>Dashboard Produksi</h2>
+<div class="stats">
+<div class="stat"><strong id="total">0</strong><small>Total proyek</small></div>
+<div class="stat"><strong id="done">0</strong><small>Selesai</small></div>
+</div>
+</section>
+
+<section class="card">
+<h2>+ Buat Proyek Baru</h2>
+<label>Nama konten</label>
+<input id="name" placeholder="Contoh: Pesawat terbesar di dunia">
+<label>Kategori</label>
+<select id="category">
+<option>Pesawat</option>
+<option>Kendaraan</option>
+<option>Mesin</option>
+<option>Kapal</option>
+<option>Teknologi</option>
+</select>
+<label>Status produksi</label>
+<select id="status">
+<option>Ide</option>
+<option>Riset</option>
+<option>Naskah</option>
+<option>Visual 3D</option>
+<option>Editing</option>
+<option>Siap Upload</option>
+<option>Selesai</option>
+</select>
+<button onclick="addProject()">Simpan Proyek</button>
+</section>
+
+<section class="card">
+<h2>Daftar Proyek</h2>
+<div id="projects"></div>
+</section>
+
+<section class="card">
+<h2>DNA TAHUIN</h2>
+<p>WAH • PENASARAN • INFORMATIF • FAKTUAL</p>
+<small>Riset fakta → Naskah → Visual 3D → CapCut → Publikasi</small>
+</section>
+</main>
+<script>
+let projects=JSON.parse(localStorage.getItem("tahuin_projects")||"[]");
+function save(){
+localStorage.setItem("tahuin_projects",JSON.stringify(projects));
+render();
+}
+function addProject(){
+let name=document.getElementById("name").value.trim();
+if(!name){alert("Isi nama konten dulu!");return}
+projects.push({
+id:Date.now(),
+name,
+category:document.getElementById("category").value,
+status:document.getElementById("status").value
+});
+document.getElementById("name").value="";
+save();
+}
+function update(id,value){
+let p=projects.find(x=>x.id===id);
+if(p){p.status=value;save()}
+}
+function removeProject(id){
+if(confirm("Hapus proyek ini?")){
+projects=projects.filter(x=>x.id!==id);
+save();
+}
+}
+function render(){
+document.getElementById("total").textContent=projects.length;
+document.getElementById("done").textContent=projects.filter(p=>p.status==="Selesai").length;
+document.getElementById("projects").innerHTML=projects.length?
+projects.map(p=>`
+<div class="project">
+<strong>${escapeHTML(p.name)}</strong><br>
+<small>${escapeHTML(p.category)}</small>
+<select onchange="update(${p.id},this.value)">
+${["Ide","Riset","Naskah","Visual 3D","Editing","Siap Upload","Selesai"].map(s=>`<option ${p.status===s?"selected":""}>${s}</option>`).join("")}
+</select>
+<button onclick="removeProject(${p.id})">Hapus</button>
+</div>`).join(""):"<small>Belum ada proyek. Yuk mulai produksi!</small>";
+}
+function escapeHTML(s){
+return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+render();
+</script>
+</body>
+</html>
