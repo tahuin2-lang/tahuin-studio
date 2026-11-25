@@ -1,127 +1,339 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080d18">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09111f">
 <title>TAHUIN Studio</title>
 <style>
+:root{--bg:#08111f;--panel:#101c2d;--panel2:#15243a;--line:#293b55;--txt:#edf5ff;--muted:#96a9c1;--cyan:#65dce5;--blue:#5aa8ff;--green:#61d6a3;--yellow:#ffd080;--red:#ff8585}
 *{box-sizing:border-box}
-body{margin:0;background:#080d18;color:#fff;font-family:Arial,sans-serif}
-header{padding:24px 20px;background:#101a2c;border-bottom:1px solid #26344d}
-header h1{margin:0;color:#58b9ff}
-header p{color:#9baac0;font-size:13px}
-main{padding:18px;max-width:750px;margin:auto}
-.card{background:#111d30;border:1px solid #263b59;border-radius:15px;padding:18px;margin-bottom:16px}
-h2{font-size:19px;margin-top:0}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.stat{background:#172943;padding:15px;border-radius:12px}
-.stat strong{display:block;font-size:25px;color:#58b9ff}
-button{background:#1689e8;color:white;border:0;border-radius:9px;padding:12px 16px;font-weight:bold}
-input,textarea,select{width:100%;padding:13px;margin:7px 0 13px;background:#081322;border:1px solid #354a66;border-radius:9px;color:white;font-size:15px}
-textarea{min-height:100px;resize:vertical}
-label{font-size:13px;color:#b6c7dc}
-.project{border-top:1px solid #30415a;padding:13px 0}
-small{color:#a4b5ca}
+body{margin:0;background:radial-gradient(ellipse at 10% -5%,#1a3457 0,transparent 36%),var(--bg);color:var(--txt);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0;border-radius:11px;padding:10px 14px;font-weight:750;background:linear-gradient(100deg,#378ef0,#48cbd1);color:#07111f}
+button.ghost{background:#1b2b43;color:var(--txt);border:1px solid var(--line)}
+button.danger{background:#3b202b;color:#ffb7b7;border:1px solid #633342}
+button:disabled{opacity:.4;cursor:not-allowed}
+.app{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh}
+.sidebar{padding:22px 14px;border-right:1px solid var(--line);background:#091321;position:sticky;top:0;height:100vh}
+.logo{font-weight:950;letter-spacing:.15em;font-size:18px;padding:5px 10px 22px}
+.logo span{color:var(--cyan)}
+.nav{display:grid;gap:6px}
+.nav button{background:transparent;color:var(--muted);text-align:left;border:1px solid transparent}
+.nav button.active,.nav button:hover{background:#15263d;color:var(--txt);border-color:var(--line)}
+.sidefoot{position:absolute;bottom:18px;left:18px;right:18px;color:var(--muted);font-size:11px}
+main{padding:25px;max-width:1300px;width:100%;margin:auto}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:22px}
+.top h1{margin:0;font-size:26px}
+.muted{color:var(--muted)}
+.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:.16em;font-weight:900}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.card{background:linear-gradient(145deg,#14243a,#0e1a2b);border:1px solid var(--line);border-radius:17px;padding:17px;min-width:0}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:1/-1}
+.metric{font-size:28px;font-weight:900;margin-top:7px}
+.card h2{font-size:17px;margin:4px 0 12px}
+.card h3{font-size:14px;margin:4px 0 8px}
+.list{display:grid;gap:9px}
+.item{padding:12px;border:1px solid var(--line);border-radius:12px;background:#0b1727}
+.itemhead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:3px 8px;color:var(--muted);font-size:10px;margin:2px}
+.tag.good{color:var(--green);border-color:#28634e}
+.tag.wait{color:var(--yellow);border-color:#69522b}
+.field{margin:10px 0}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px;background:#091524;color:var(--txt);outline:none}
+textarea{min-height:95px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--blue)}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.row>*{flex:1}.row .fit{flex:0 0 auto}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.step{display:flex;gap:10px;padding:11px;background:#0b1727;border:1px solid var(--line);border-radius:12px}
+.n{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:#1c3b5e;color:#a9dcff;font-weight:900;flex:none}
+.progress{height:7px;background:#1d2b40;border-radius:99px;overflow:hidden;margin:10px 0}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:13px}
+.hidden{display:none!important}
+.scene{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;padding:12px;background:#0a1626;border:1px solid var(--line);border-radius:12px;margin:9px 0}
+.scene .num{background:#183451;border-radius:9px;display:grid;place-items:center;font-weight:900;color:#a7dcff}
+.notice{padding:12px;border-radius:11px;border-left:3px solid var(--yellow);background:#292317;color:#ead8b4;font-size:12px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#e8f7ff;color:#08111f;padding:10px 16px;border-radius:99px;font-weight:800;box-shadow:0 8px 30px #0008;z-index:20}
+@media(max-width:820px){.app{display:block}.sidebar{height:auto;position:sticky;z-index:10;padding:10px;border-right:0;border-bottom:1px solid var(--line)}.logo{padding:4px 8px 9px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:8px 11px}.sidefoot{display:none}main{padding:17px 12px 40px}.s3,.s4,.s5,.s6,.s7,.s8{grid-column:1/-1}.top h1{font-size:21px}}
 </style>
 </head>
 <body>
-<header>
-<h1>TAHUIN STUDIO</h1>
-<p>AI CONTENT PRODUCTION WORKSPACE</p>
-</header>
+<div class="app">
+<aside class="sidebar">
+<div class="logo">TAHUIN<span>.</span></div>
+<nav class="nav" id="nav">
+<button class="active" data-page="dashboard">⌂ Dashboard</button>
+<button data-page="projects">▤ Proyek</button>
+<button data-page="studio">✦ Studio Produksi</button>
+<button data-page="export">⇩ Ekspor</button>
+<button data-page="connections">⚙ Koneksi</button>
+</nav>
+<div class="sidefoot">MVP lokal · Data tersimpan di browser perangkat ini</div>
+</aside>
 <main>
-<section class="card">
-<h2>Dashboard Produksi</h2>
-<div class="stats">
-<div class="stat"><strong id="total">0</strong><small>Total proyek</small></div>
-<div class="stat"><strong id="done">0</strong><small>Selesai</small></div>
+<header class="top">
+<div><div class="eyebrow">AI-ASSISTED SHORTS WORKFLOW</div><h1 id="pageTitle">Dashboard</h1></div>
+<button onclick="newProject()">＋ Proyek baru</button>
+</header>
+
+<section id="dashboard" class="page">
+<div class="grid">
+<div class="card s3"><div class="muted">Total proyek</div><div class="metric" id="mTotal">0</div></div>
+<div class="card s3"><div class="muted">Sedang dikerjakan</div><div class="metric" id="mActive">0</div></div>
+<div class="card s3"><div class="muted">Siap upload</div><div class="metric" id="mReady">0</div></div>
+<div class="card s3"><div class="muted">Sudah terbit</div><div class="metric" id="mPublished">0</div></div>
+<div class="card s7">
+<div class="eyebrow">WORKSPACE</div>
+<h2>Produksi TAHUIN</h2>
+<p class="muted">Satu proyek untuk satu video. Simpan riset, naskah, storyboard, dan status produksi dalam satu tempat.</p>
+<div class="actions">
+<button onclick="newProject()">Mulai proyek</button>
+<button class="ghost" onclick="go('projects')">Lihat semua proyek</button>
+</div>
+</div>
+<div class="card s5">
+<div class="eyebrow">DNA KONTEN</div>
+<h2>WAH · PENASARAN · INFORMATIF · FAKTUAL</h2>
+<p class="muted">Objek nyata yang ekstrem. Visual 3D teknis sinematik. Akurasi lebih penting daripada kecepatan.</p>
+<span class="tag">Pesawat</span><span class="tag">Mesin</span><span class="tag">Kendaraan</span><span class="tag">Kapal</span><span class="tag">Teknologi</span>
+</div>
+<div class="card s12">
+<div class="eyebrow">PROYEK TERBARU</div>
+<h2>Lanjutkan produksi</h2>
+<div id="recent" class="list"></div>
+</div>
 </div>
 </section>
 
-<section class="card">
-<h2>+ Buat Proyek Baru</h2>
-<label>Nama konten</label>
-<input id="name" placeholder="Contoh: Pesawat terbesar di dunia">
-<label>Kategori</label>
-<select id="category">
-<option>Pesawat</option>
-<option>Kendaraan</option>
-<option>Mesin</option>
-<option>Kapal</option>
-<option>Teknologi</option>
-</select>
-<label>Status produksi</label>
-<select id="status">
-<option>Ide</option>
-<option>Riset</option>
-<option>Naskah</option>
-<option>Visual 3D</option>
-<option>Editing</option>
-<option>Siap Upload</option>
-<option>Selesai</option>
-</select>
-<button onclick="addProject()">Simpan Proyek</button>
+<section id="projects" class="page hidden">
+<div class="card">
+<div class="row">
+<div><h2>Semua proyek</h2><p class="muted">Data tersimpan lokal di browser ini.</p></div>
+<button class="fit" onclick="newProject()">＋ Buat proyek</button>
+</div>
+<div id="projectList" class="list"></div>
+</div>
 </section>
 
-<section class="card">
-<h2>Daftar Proyek</h2>
-<div id="projects"></div>
+<section id="studio" class="page hidden">
+<div class="grid">
+<div class="card s4">
+<div class="eyebrow">PILIH PROYEK</div>
+<h2>Ruang produksi</h2>
+<select id="projectSelect" onchange="selectProject(this.value)"></select>
+<div id="projectMeta" class="muted" style="margin-top:10px"></div>
+<div class="field"><label>Status produksi</label>
+<select id="status" onchange="updateField('status',this.value)">
+<option>Ide</option><option>Riset</option><option>Naskah</option><option>Visual 3D</option><option>Editing</option><option>Siap Upload</option><option>Terbit</option>
+</select></div>
+<div class="field"><label>Kategori</label>
+<select id="category" onchange="updateField('category',this.value)">
+<option>Pesawat</option><option>Mesin</option><option>Kendaraan</option><option>Kapal</option><option>Teknologi</option><option>Lainnya</option>
+</select></div>
+</div>
+
+<div class="card s8">
+<div class="eyebrow">01 · IDE & RISET</div>
+<h2>Brief dan fakta</h2>
+<div class="field"><label>Judul / objek</label><input id="title" placeholder="Contoh: Mesin jet turbofan..." oninput="updateField('title',this.value)"></div>
+<div class="field"><label>Angle / pertanyaan utama</label><textarea id="angle" placeholder="Apa hal paling mengejutkan yang bisa dibuktikan?" oninput="updateField('angle',this.value)"></textarea></div>
+<div class="field"><label>Fakta inti dan catatan verifikasi</label><textarea id="facts" placeholder="Angka, fungsi, pembanding, batas klaim, dan apa yang belum pasti..." oninput="updateField('facts',this.value)"></textarea></div>
+<div class="field"><label>URL sumber fakta (satu per baris)</label><textarea id="sources" placeholder="https://..." oninput="updateField('sources',this.value)"></textarea></div>
+<div class="row">
+<div class="field"><label>Status verifikasi</label>
+<select id="verified" onchange="updateField('verified',this.value)">
+<option>Belum diperiksa</option><option>Perlu verifikasi</option><option>Fakta inti terverifikasi</option>
+</select></div>
+<div class="field"><label>Target durasi</label>
+<select id="duration" onchange="updateField('duration',this.value)">
+<option>30 detik</option><option>35 detik</option><option>45 detik</option>
+</select></div>
+</div>
+</div>
+
+<div class="card s12">
+<div class="eyebrow">02 · NASKAH VO</div>
+<h2>Script</h2>
+<textarea id="script" placeholder="Tulis naskah VO di sini. Hook: STOPPER → INFORMATION GAP → CURIOSITY → PAYOFF." oninput="updateField('script',this.value)"></textarea>
+<div class="actions"><button class="ghost" onclick="copy('script')">Salin naskah</button></div>
+</div>
+
+<div class="card s12">
+<div class="eyebrow">03 · STORYBOARD 3D</div>
+<h2>Adegan visual</h2>
+<p class="muted">Tulis prompt terpisah untuk tiap adegan. Pertahankan bentuk objek yang akurat dan gaya 3D teknis sinematik.</p>
+<div id="scenes"></div>
+<div class="actions"><button class="ghost" onclick="addScene()">＋ Tambah adegan</button></div>
+</div>
+
+<div class="card s12">
+<div class="eyebrow">04 · CHECKLIST CAPCUT</div>
+<h2>Persiapan editing</h2>
+<div id="checks" class="list"></div>
+</div>
+
+<div class="card s12">
+<div class="actions">
+<button onclick="saveProject()">Simpan proyek</button>
+<button class="ghost" onclick="exportCurrent()">Ekspor paket proyek</button>
+<button class="danger" onclick="deleteCurrent()">Hapus proyek</button>
+</div>
+</div>
+</div>
 </section>
 
-<section class="card">
-<h2>DNA TAHUIN</h2>
-<p>WAH • PENASARAN • INFORMATIF • FAKTUAL</p>
-<small>Riset fakta → Naskah → Visual 3D → CapCut → Publikasi</small>
+<section id="export" class="page hidden">
+<div class="grid">
+<div class="card s6">
+<div class="eyebrow">EXPORT</div><h2>Paket produksi</h2>
+<p class="muted">Unduh data proyek sebagai JSON untuk cadangan, atau Markdown untuk bahan kerja dan salin ke aplikasi lain.</p>
+<div class="actions">
+<button onclick="exportAll()">Unduh semua proyek (JSON)</button>
+<button class="ghost" onclick="exportCurrent()">Unduh proyek aktif</button>
+</div>
+</div>
+<div class="card s6">
+<div class="eyebrow">IMPORT</div><h2>Pulihkan proyek</h2>
+<p class="muted">Pilih file JSON cadangan dari TAHUIN Studio.</p>
+<input id="importFile" type="file" accept=".json,application/json">
+<div class="actions"><button class="ghost" onclick="importData()">Impor JSON</button></div>
+</div>
+<div class="card s12">
+<h2>Catatan ekspor CapCut</h2>
+<ol class="muted">
+<li>Unduh paket proyek dan aset gambar/video dari penyedia AI.</li>
+<li>Simpan klip dengan urutan 01, 02, 03 sesuai storyboard.</li>
+<li>Masukkan VO, klip, musik/efek, dan subtitle ke CapCut.</li>
+<li>Periksa fakta, audio, teks, dan rasio 9:16 sebelum ekspor.</li>
+</ol>
+<div class="notice">MVP ini belum membuat file proyek CapCut (.capcut) dan belum mengirim aset otomatis ke CapCut.</div>
+</div>
+</div>
+</section>
+
+<section id="connections" class="page hidden">
+<div class="grid">
+<div class="card s6">
+<div class="eyebrow">DATA HUB</div><h2>Notion</h2>
+<p class="muted">Database utama TAHUIN Content Pipeline sudah tersedia di workspace. Koneksi website langsung membutuhkan backend dan autentikasi integrasi yang aman.</p>
+<span class="tag wait">Belum tersambung ke website</span>
+<div class="actions"><a href="https://app.notion.com/p/41c12f90b59a810cb32df9af2d869ef4" target="_blank" rel="noopener"><button class="ghost">Buka database Notion</button></a></div>
+</div>
+<div class="card s6">
+<div class="eyebrow">AI TEXT</div><h2>OpenAI API</h2>
+<p class="muted">Untuk riset berbantuan, naskah, storyboard, dan prompt visual. API key harus disimpan di backend/secret manager.</p>
+<span class="tag wait">Menunggu persetujuan & API key</span>
+</div>
+<div class="card s6">
+<div class="eyebrow">IMAGE & VIDEO</div><h2>fal / penyedia media</h2>
+<p class="muted">Kandidat pembuatan gambar dan video. Model, biaya, watermark, dan lisensi perlu diuji sebelum dipilih.</p>
+<span class="tag wait">Menunggu koneksi akun</span>
+</div>
+<div class="card s6">
+<div class="eyebrow">DEPLOYMENT</div><h2>Hosting & domain</h2>
+<p class="muted">Butuh layanan hosting, autentikasi, penyimpanan file, dan domain bila ingin website online.</p>
+<span class="tag wait">Belum dipublikasikan</span>
+</div>
+<div class="card s12">
+<div class="notice">Jangan tempel API key, token, atau password di halaman ini. Jangan aktifkan layanan berbayar sebelum biaya dan izin akses disetujui.</div>
+</div>
+</div>
 </section>
 </main>
+</div>
+<div id="toast" class="toast hidden"></div>
+
 <script>
-let projects=JSON.parse(localStorage.getItem("tahuin_projects")||"[]");
-function save(){
-localStorage.setItem("tahuin_projects",JSON.stringify(projects));
-render();
+const KEY='tahuin_studio_mvp_v1';
+let projects=JSON.parse(localStorage.getItem(KEY)||'[]'), current=null;
+const defaultChecks=['Fakta utama dan angka sudah diverifikasi','Nama objek dan istilah teknis benar','VO jelas dan tidak terlalu cepat','Visual sesuai bentuk objek nyata','Klip tersusun vertikal 9:16','Subtitle terbaca dan tidak menutupi objek','Musik/efek aman digunakan','Judul, caption, dan hashtag diperiksa'];
+
+function persist(){localStorage.setItem(KEY,JSON.stringify(projects));render()}
+function toast(s){let e=document.getElementById('toast');e.textContent=s;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),1800)}
+function go(p){
+document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));
+document.getElementById(p).classList.remove('hidden');
+document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));
+document.getElementById('pageTitle').textContent=({dashboard:'Dashboard',projects:'Proyek',studio:'Studio Produksi',export:'Ekspor',connections:'Koneksi'})[p];
+if(p==='studio')loadEditor();render()
 }
-function addProject(){
-let name=document.getElementById("name").value.trim();
-if(!name){alert("Isi nama konten dulu!");return}
-projects.push({
-id:Date.now(),
-name,
-category:document.getElementById("category").value,
-status:document.getElementById("status").value
-});
-document.getElementById("name").value="";
-save();
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+
+function newProject(){
+let p={id:Date.now().toString(),title:'Proyek baru',category:'Teknologi',status:'Ide',angle:'',facts:'',sources:'',verified:'Belum diperiksa',duration:'30 detik',script:'',scenes:[],checks:defaultChecks.map(x=>({label:x,done:false})),created:new Date().toISOString()};
+projects.unshift(p);current=p.id;persist();go('studio');toast('Proyek dibuat')
 }
-function update(id,value){
-let p=projects.find(x=>x.id===id);
-if(p){p.status=value;save()}
+function active(){return projects.find(p=>p.id===current)}
+function selectProject(id){current=id;loadEditor()}
+function loadEditor(){
+let sel=document.getElementById('projectSelect');
+sel.innerHTML=projects.map(p=>`<option value="${p.id}">${esc(p.title||'Tanpa judul')}</option>`).join('');
+if(!current||!projects.some(p=>p.id===current))current=projects[0]?.id||null;
+sel.value=current||'';
+let p=active();
+['title','angle','facts','sources','script'].forEach(k=>document.getElementById(k).value=p?.[k]||'');
+['status','category','verified','duration'].forEach(k=>document.getElementById(k).value=p?.[k]||({status:'Ide',category:'Teknologi',verified:'Belum diperiksa',duration:'30 detik'})[k]);
+document.getElementById('projectMeta').textContent=p?'Dibuat '+new Date(p.created).toLocaleDateString('id-ID'):'Belum ada proyek';
+renderScenes();renderChecks()
 }
-function removeProject(id){
-if(confirm("Hapus proyek ini?")){
-projects=projects.filter(x=>x.id!==id);
-save();
+function updateField(k,v){
+let p=active();
+if(p){p[k]=v;if(k==='title')document.getElementById('projectSelect').selectedOptions[0].textContent=v||'Tanpa judul';localStorage.setItem(KEY,JSON.stringify(projects));renderStats()}
 }
+function saveProject(){
+let p=active();if(!p)return toast('Buat proyek dulu');
+p.title=document.getElementById('title').value||'Proyek tanpa judul';
+persist();toast('Proyek tersimpan di perangkat ini')
+}
+function addScene(){
+let p=active();if(!p)return toast('Pilih proyek dulu');
+p.scenes.push({vo:'',visual:'',motion:'',duration:'5 detik'});persist();loadEditor()
+}
+function renderScenes(){
+let p=active(),root=document.getElementById('scenes');root.innerHTML='';
+if(!p){root.innerHTML='<div class="empty">Buat proyek untuk mulai menulis storyboard.</div>';return}
+if(!p.scenes.length){root.innerHTML='<div class="empty">Belum ada adegan. Tekan “Tambah adegan”.</div>';return}
+p.scenes.forEach((s,i)=>{
+let d=document.createElement('div');d.className='scene';
+d.innerHTML=`<div class="num">${String(i+1).padStart(2,'0')}</div><div>
+<div class="field"><label>Potongan VO</label><textarea data-k="vo">${esc(s.vo)}</textarea></div>
+<div class="field"><label>Prompt gambar 3D</label><textarea data-k="visual" placeholder="Objek, sudut kamera, pencahayaan, lingkungan, skala, detail teknis...">${esc(s.visual)}</textarea></div>
+<div class="field"><label>Gerakan image-to-video</label><textarea data-k="motion" placeholder="Gerakan kamera dan objek, durasi, perubahan yang terjadi...">${esc(s.motion)}</textarea></div>
+<div class="row"><div class="field"><label>Durasi</label><input data-k="duration" value="${esc(s.duration)}"></div><button class="danger fit" data-del="${i}">Hapus</button></div></div>`;
+d.querySelectorAll('[data-k]').forEach(el=>el.oninput=()=>{s[el.dataset.k]=el.value;localStorage.setItem(KEY,JSON.stringify(projects))});
+d.querySelector('[data-del]').onclick=()=>{p.scenes.splice(i,1);persist();loadEditor()};
+root.append(d)
+})
+}
+function renderChecks(){
+let p=active(),root=document.getElementById('checks');root.innerHTML='';
+if(!p)return;
+p.checks.forEach((c,i)=>{
+let l=document.createElement('label');l.className='item';l.style.display='flex';l.style.gap='10px';
+l.innerHTML=`<input type="checkbox" style="width:auto" ${c.done?'checked':''}><span>${esc(c.label)}</span>`;
+l.querySelector('input').onchange=e=>{c.done=e.target.checked;localStorage.setItem(KEY,JSON.stringify(projects));renderStats()};
+root.append(l)
+})
+}
+function renderStats(){
+document.getElementById('mTotal').textContent=projects.length;
+document.getElementById('mActive').textContent=projects.filter(p=>!['Ide','Siap Upload','Terbit'].includes(p.status)).length;
+document.getElementById('mReady').textContent=projects.filter(p=>p.status==='Siap Upload').length;
+document.getElementById('mPublished').textContent=projects.filter(p=>p.status==='Terbit').length
 }
 function render(){
-document.getElementById("total").textContent=projects.length;
-document.getElementById("done").textContent=projects.filter(p=>p.status==="Selesai").length;
-document.getElementById("projects").innerHTML=projects.length?
-projects.map(p=>`
-<div class="project">
-<strong>${escapeHTML(p.name)}</strong><br>
-<small>${escapeHTML(p.category)}</small>
-<select onchange="update(${p.id},this.value)">
-${["Ide","Riset","Naskah","Visual 3D","Editing","Siap Upload","Selesai"].map(s=>`<option ${p.status===s?"selected":""}>${s}</option>`).join("")}
-</select>
-<button onclick="removeProject(${p.id})">Hapus</button>
-</div>`).join(""):"<small>Belum ada proyek. Yuk mulai produksi!</small>";
+renderStats();
+let recent=document.getElementById('recent'),list=document.getElementById('projectList');
+let card=p=>`<div class="item"><div class="itemhead"><div><strong>${esc(p.title||'Tanpa judul')}</strong><div class="muted">${esc(p.category)} · ${esc(p.verified||'')}</div></div><span class="tag ${p.status==='Terbit'?'good':p.status==='Siap Upload'?'good':'wait'}">${esc(p.status)}</span></div><div class="progress"><i style="width:${Math.round((p.checks.filter(c=>c.done).length/Math.max(p.checks.length,1))*100)}%"></i></div><button class="ghost" onclick="openProject('${p.id}')">Buka proyek</button></div>`;
+recent.innerHTML=projects.length?projects.slice(0,4).map(card).join(''):'<div class="empty">Belum ada proyek. Tekan “Proyek baru” untuk memulai.</div>';
+list.innerHTML=projects.length?projects.map(card).join(''):'<div class="empty">Belum ada proyek.</div>'
 }
-function escapeHTML(s){
-return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-render();
-</script>
-</body>
-</html>
+function openProject(id){current=id;go('studio')}
+function deleteCurrent(){
+let p=active();if(!p)return;
+if(!confirm('Hapus proyek ini dari penyimpanan browser?'))return;
+projects=projects.filter(x=>x.id!==current);current=projects[0]?.id||null;
+persist();loadEdi
